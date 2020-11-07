@@ -1,0 +1,39 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  flex: 0.5;
+  cursor: pointer;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  user-select: none;
+}
+
+.filter {
+  display: flex;
+  flex-grow: 0.7;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.filterInput {
+  width: 99%;
+  height: 100%;
+}
+
+.states {
+  flex-grow: 0.2;
+  flex-basis: 200px;
+  display: flex;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0.1;
+}

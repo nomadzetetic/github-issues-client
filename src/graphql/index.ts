@@ -18616,71 +18616,101 @@ export type ViewerHovercardContext = HovercardContext & {
 
 
 export type IssuesQueryVariables = Exact<{
-  state: IssueState;
+  query: Scalars['String'];
   after?: Maybe<Scalars['String']>;
 }>;
 
 
 export type IssuesQuery = (
   { __typename?: 'Query' }
-  & { repository?: Maybe<(
-    { __typename?: 'Repository' }
-    & Pick<Repository, 'id'>
-    & { issues: (
-      { __typename?: 'IssueConnection' }
-      & Pick<IssueConnection, 'totalCount'>
-      & { nodes?: Maybe<Array<Maybe<(
-        { __typename?: 'Issue' }
-        & Pick<Issue, 'id' | 'bodyText' | 'state'>
-        & { author?: Maybe<(
-          { __typename?: 'Bot' }
-          & Pick<Bot, 'avatarUrl' | 'login'>
-        ) | (
-          { __typename?: 'EnterpriseUserAccount' }
-          & Pick<EnterpriseUserAccount, 'avatarUrl' | 'login'>
-        ) | (
-          { __typename?: 'Mannequin' }
-          & Pick<Mannequin, 'avatarUrl' | 'login'>
-        ) | (
-          { __typename?: 'Organization' }
-          & Pick<Organization, 'avatarUrl' | 'login'>
-        ) | (
-          { __typename?: 'User' }
-          & Pick<User, 'avatarUrl' | 'login'>
-        )> }
-      )>>>, pageInfo: (
-        { __typename?: 'PageInfo' }
-        & Pick<PageInfo, 'endCursor' | 'hasNextPage'>
+  & { search: (
+    { __typename?: 'SearchResultItemConnection' }
+    & Pick<SearchResultItemConnection, 'issueCount'>
+    & { nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | (
+      { __typename?: 'Issue' }
+      & Pick<Issue, 'id' | 'title' | 'bodyText' | 'state' | 'createdAt'>
+      & { author?: Maybe<(
+        { __typename?: 'Bot' }
+        & Pick<Bot, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'EnterpriseUserAccount' }
+        & Pick<EnterpriseUserAccount, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'Mannequin' }
+        & Pick<Mannequin, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'User' }
+        & Pick<User, 'login' | 'avatarUrl'>
+      )>, comments: (
+        { __typename?: 'IssueCommentConnection' }
+        & { nodes?: Maybe<Array<Maybe<(
+          { __typename?: 'IssueComment' }
+          & Pick<IssueComment, 'bodyText'>
+          & { author?: Maybe<(
+            { __typename?: 'Bot' }
+            & Pick<Bot, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'EnterpriseUserAccount' }
+            & Pick<EnterpriseUserAccount, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'Mannequin' }
+            & Pick<Mannequin, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'Organization' }
+            & Pick<Organization, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'User' }
+            & Pick<User, 'login' | 'avatarUrl'>
+          )> }
+        )>>>, pageInfo: (
+          { __typename?: 'PageInfo' }
+          & Pick<PageInfo, 'endCursor' | 'hasNextPage'>
+        ) }
       ) }
+    ) | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | { __typename?: 'User' }>>>, pageInfo: (
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'hasNextPage' | 'endCursor'>
     ) }
-  )> }
+  ) }
 );
 
 
 export const IssuesDocument = gql`
-    query issues($state: IssueState!, $after: String) {
-  repository(name: "comments", owner: "nomadzetetic") {
-    id
-    issues(
-      first: 10
-      after: $after
-      orderBy: {field: CREATED_AT, direction: DESC}
-      states: [$state]
-    ) {
-      nodes {
+    query issues($query: String!, $after: String) {
+  search(query: $query, type: ISSUE, first: 10, after: $after) {
+    nodes {
+      ... on Issue {
         id
+        title
         bodyText
         state
+        createdAt
         author {
-          avatarUrl
           login
+          avatarUrl
+        }
+        comments(first: 10) {
+          nodes {
+            author {
+              login
+              avatarUrl
+            }
+            bodyText
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
         }
       }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-      totalCount
+    }
+    issueCount
+    pageInfo {
+      hasNextPage
+      endCursor
     }
   }
 }
@@ -18698,7 +18728,7 @@ export const IssuesDocument = gql`
  * @example
  * const { data, loading, error } = useIssuesQuery({
  *   variables: {
- *      state: // value for 'state'
+ *      query: // value for 'query'
  *      after: // value for 'after'
  *   },
  * });

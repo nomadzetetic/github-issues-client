@@ -1,7 +1,8 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
+import { mocked } from 'ts-jest/utils';
 import { SearchToolbar } from '.';
-
+import * as graphql from '../../../graphql';
 
 describe('<SearchToolbar />', () => {
   beforeEach(() => {
@@ -9,6 +10,8 @@ describe('<SearchToolbar />', () => {
   });
 
   test('search', async () => {
+    const searchIssues = jest.fn();
+    mocked<any>(jest.spyOn(graphql, 'useIssuesLazyQuery')).mockImplementation(() => [searchIssues]);
     const { getByTestId } = render(<SearchToolbar />);
 
     const searchInput = getByTestId('searchInput');
@@ -18,16 +21,28 @@ describe('<SearchToolbar />', () => {
     });
 
     const searchIssueStateOpen = getByTestId('searchIssueStateOpen');
-    expect(searchIssueStateOpen).toHaveAttribute('checked');
+    expect(searchIssueStateOpen).toBeChecked();
 
-    // const searchRadioClosed = getByTestId('closed');
-    // fireEvent.click(searchRadioClosed);
-    // await waitFor(() => {
-    //   expect(searchRadioClosed).toHaveAttribute('checked');
-    // });
+    const searchIssueStateClosed = getByTestId('searchIssueStateClosed');
+    fireEvent.click(searchIssueStateClosed, { target: { value: 'CLOSED' } });
+    await waitFor(() => {
+      expect(searchIssueStateClosed).toBeChecked();
+      expect(searchIssueStateOpen).not.toBeChecked();
+    });
 
-    // fireEvent.click()
+    const searchButton = getByTestId('searchButton');
+    fireEvent.click(searchButton);
+
+    await waitFor(() => {
+      expect(searchIssueStateClosed).toBeDisabled();
+      expect(searchIssueStateOpen).toBeDisabled();
+      expect(searchInput).toBeDisabled();
+      expect(searchButton).toBeDisabled();
+      expect(searchIssues).toHaveBeenCalledWith({
+        variables: {
+          query: 'is:issue is:closed repo:facebook/react in:body in:title test 1',
+        },
+      });
+    });
   });
-
-  // appBusy, search, issueState, searchText, setIssueState, setSearchText
 });

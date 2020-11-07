@@ -11,6 +11,19 @@ query issues($query: String!, $after: String) {
           login
           avatarUrl
         }
+        comments(first: 10) {
+          nodes {
+            author {
+              login
+              avatarUrl
+            }
+            bodyText
+          }
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+        }
       }
     }
     issueCount
