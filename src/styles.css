@@ -1,0 +1,64 @@
+html, body {
+  font-size: 16px;
+}
+
+
+
+.search-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.search-toolbar-filter {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 40px;
+}
+
+.search-toolbar-filter input {
+  width: 99%;
+}
+
+.search-toolbar-states {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-basis: 150px;
+}
+
+.search-toolbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 100px;
+  min-height: 50px;
+}
+
+@media screen and (max-width: 500px) {
+  .search-toolbar {
+    flex-direction: column;
+  }
+
+  .search-toolbar-filter {
+    padding-right: 0;
+  }
+
+  .search-toolbar-states {
+    flex-basis: 40px;
+    justify-content: space-between;
+  }
+
+  .search-toolbar-button {
+    flex-basis: 20px;
+    min-height: auto;
+  }
+  
+  .search-toolbar-button button {
+    width: 100%;
+  }
+}
+

@@ -1,0 +1,22 @@
+query issues($query: String!, $after: String) {
+  search(query: $query, type: ISSUE, first: 10, after: $after) {
+    nodes {
+      ... on Issue {
+        id
+        title
+        bodyText
+        state
+        createdAt
+        author {
+          login
+          avatarUrl
+        }
+      }
+    }
+    issueCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

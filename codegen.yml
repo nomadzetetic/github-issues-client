@@ -1,0 +1,18 @@
+overwrite: true
+schema:
+  - https://api.github.com/graphql:
+      headers:
+        Authorization: 'Bearer 71e7e69158d622ead34ae45053b14d6458ed5c12'
+documents:
+  - 'src/graphql/**/*.graphql'
+generates:
+  src/graphql/index.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      gqlImport: 'graphql-tag'
+      withComponent: false
+      withHOC: false
+      withHooks: true

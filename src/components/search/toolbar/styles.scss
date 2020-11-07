@@ -1,0 +1,30 @@
+.search-toolbar {
+  display: flex;
+  justify-content: space-between;
+  & label {
+    flex: 0.5;
+    cursor: pointer;
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    user-select: none;
+  }
+
+  &-filter {
+    display: flex;
+    flex-grow: 0.5;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    &-input {
+      width: 99%;
+      height: 100%;
+    }
+  }
+
+  &-states {
+    flex-grow: 0.2;
+    flex-basis: 200px;
+    display: flex;
+  }
+}
