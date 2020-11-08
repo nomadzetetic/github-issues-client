@@ -1,6 +1,6 @@
-import { IssueState } from '../../graphql';
+import { IssueState } from '../../../graphql';
 
-export const buildQuery = (state: IssueState, input?: string) => {
+export const buildSearchQuery = (state: IssueState, input?: string) => {
   const filters = [
     'is:issue',
     `is:${state === IssueState.Open ? 'open' : 'closed'}`,

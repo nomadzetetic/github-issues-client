@@ -1,7 +1,15 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { Issue } from '../issue';
 
 export const DetailsPage = () => {
-  const { id } = useParams<any>();
-  return <div>{id}</div>;
+  const { id } = useParams<{ id: string }>();
+  const issueNumber = Number(id);
+
+  return (
+    <div>
+      <Link to={'/'}>{'<'} Go Back</Link>
+      <Issue issueNumber={issueNumber} />
+    </div>
+  );
 };

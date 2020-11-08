@@ -18615,20 +18615,20 @@ export type ViewerHovercardContext = HovercardContext & {
 };
 
 
-export type IssuesQueryVariables = Exact<{
-  query: Scalars['String'];
+export type IssueQueryVariables = Exact<{
+  number: Scalars['Int'];
   after?: Maybe<Scalars['String']>;
 }>;
 
 
-export type IssuesQuery = (
+export type IssueQuery = (
   { __typename?: 'Query' }
-  & { search: (
-    { __typename?: 'SearchResultItemConnection' }
-    & Pick<SearchResultItemConnection, 'issueCount'>
-    & { nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | (
+  & { repository?: Maybe<(
+    { __typename?: 'Repository' }
+    & Pick<Repository, 'id'>
+    & { issue?: Maybe<(
       { __typename?: 'Issue' }
-      & Pick<Issue, 'id' | 'title' | 'bodyText' | 'state' | 'createdAt'>
+      & Pick<Issue, 'id' | 'title' | 'bodyText' | 'state' | 'createdAt' | 'number'>
       & { author?: Maybe<(
         { __typename?: 'Bot' }
         & Pick<Bot, 'login' | 'avatarUrl'>
@@ -18648,7 +18648,66 @@ export type IssuesQuery = (
         { __typename?: 'IssueCommentConnection' }
         & { nodes?: Maybe<Array<Maybe<(
           { __typename?: 'IssueComment' }
-          & Pick<IssueComment, 'bodyText'>
+          & Pick<IssueComment, 'id' | 'bodyText' | 'createdAt'>
+          & { author?: Maybe<(
+            { __typename?: 'Bot' }
+            & Pick<Bot, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'EnterpriseUserAccount' }
+            & Pick<EnterpriseUserAccount, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'Mannequin' }
+            & Pick<Mannequin, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'Organization' }
+            & Pick<Organization, 'login' | 'avatarUrl'>
+          ) | (
+            { __typename?: 'User' }
+            & Pick<User, 'login' | 'avatarUrl'>
+          )> }
+        )>>>, pageInfo: (
+          { __typename?: 'PageInfo' }
+          & Pick<PageInfo, 'endCursor' | 'hasNextPage'>
+        ) }
+      ) }
+    )> }
+  )> }
+);
+
+export type IssuesQueryVariables = Exact<{
+  query: Scalars['String'];
+  after?: Maybe<Scalars['String']>;
+}>;
+
+
+export type IssuesQuery = (
+  { __typename?: 'Query' }
+  & { search: (
+    { __typename?: 'SearchResultItemConnection' }
+    & Pick<SearchResultItemConnection, 'issueCount'>
+    & { nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | (
+      { __typename?: 'Issue' }
+      & Pick<Issue, 'id' | 'title' | 'bodyText' | 'state' | 'createdAt' | 'number'>
+      & { author?: Maybe<(
+        { __typename?: 'Bot' }
+        & Pick<Bot, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'EnterpriseUserAccount' }
+        & Pick<EnterpriseUserAccount, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'Mannequin' }
+        & Pick<Mannequin, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'login' | 'avatarUrl'>
+      ) | (
+        { __typename?: 'User' }
+        & Pick<User, 'login' | 'avatarUrl'>
+      )>, comments: (
+        { __typename?: 'IssueCommentConnection' }
+        & { nodes?: Maybe<Array<Maybe<(
+          { __typename?: 'IssueComment' }
+          & Pick<IssueComment, 'id' | 'createdAt' | 'bodyText'>
           & { author?: Maybe<(
             { __typename?: 'Bot' }
             & Pick<Bot, 'login' | 'avatarUrl'>
@@ -18678,6 +18737,67 @@ export type IssuesQuery = (
 );
 
 
+export const IssueDocument = gql`
+    query issue($number: Int!, $after: String) {
+  repository(name: "react", owner: "facebook") {
+    id
+    issue(number: $number) {
+      id
+      title
+      bodyText
+      state
+      createdAt
+      number
+      author {
+        login
+        avatarUrl
+      }
+      comments(first: 10, after: $after) {
+        nodes {
+          id
+          bodyText
+          createdAt
+          author {
+            login
+            avatarUrl
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useIssueQuery__
+ *
+ * To run a query within a React component, call `useIssueQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIssueQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIssueQuery({
+ *   variables: {
+ *      number: // value for 'number'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useIssueQuery(baseOptions?: Apollo.QueryHookOptions<IssueQuery, IssueQueryVariables>) {
+        return Apollo.useQuery<IssueQuery, IssueQueryVariables>(IssueDocument, baseOptions);
+      }
+export function useIssueLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IssueQuery, IssueQueryVariables>) {
+          return Apollo.useLazyQuery<IssueQuery, IssueQueryVariables>(IssueDocument, baseOptions);
+        }
+export type IssueQueryHookResult = ReturnType<typeof useIssueQuery>;
+export type IssueLazyQueryHookResult = ReturnType<typeof useIssueLazyQuery>;
+export type IssueQueryResult = Apollo.QueryResult<IssueQuery, IssueQueryVariables>;
 export const IssuesDocument = gql`
     query issues($query: String!, $after: String) {
   search(query: $query, type: ISSUE, first: 10, after: $after) {
@@ -18688,17 +18808,20 @@ export const IssuesDocument = gql`
         bodyText
         state
         createdAt
+        number
         author {
           login
           avatarUrl
         }
         comments(first: 10) {
           nodes {
+            id
+            createdAt
+            bodyText
             author {
               login
               avatarUrl
             }
-            bodyText
           }
           pageInfo {
             endCursor

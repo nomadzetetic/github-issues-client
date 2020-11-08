@@ -1,0 +1,20 @@
+.text {
+  white-space: pre-wrap;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+}
+
+.comments {
+  list-style-type: decimal;
+  margin: 50px 0;
+  font-size: 12px;
+}
+
+.loadMoreContainer {
+  display: flex;
+  justify-content: center;
+}

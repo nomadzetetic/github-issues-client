@@ -2,9 +2,9 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { mocked } from 'ts-jest/utils';
 import { LoadMoreButton } from '.';
-import { useSearch } from '../../../hooks/use-search';
+import { useSearch } from '../use-search';
 
-jest.mock('../../../hooks/use-search', () => ({ useSearch: jest.fn() }));
+jest.mock('../use-search', () => ({ useSearch: jest.fn() }));
 
 describe('<LoadMoreButton />', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('<LoadMoreButton />', () => {
   test('no cursor value', () => {
     mocked<any>(useSearch).mockImplementation(() => ({
       searchCursor: '',
-      inSearch: false,
+      busy: false,
       search: jest.fn(),
     }));
     const { asFragment } = render(<LoadMoreButton />);
@@ -24,7 +24,7 @@ describe('<LoadMoreButton />', () => {
   test('busy', () => {
     mocked<any>(useSearch).mockImplementation(() => ({
       searchCursor: 'asoidwqoijd',
-      inSearch: true,
+      busy: true,
       search: jest.fn(),
     }));
 
@@ -37,7 +37,7 @@ describe('<LoadMoreButton />', () => {
 
     mocked<any>(useSearch).mockImplementation(() => ({
       searchCursor: 'cursorValue',
-      inSearch: false,
+      busy: false,
       search,
     }));
 

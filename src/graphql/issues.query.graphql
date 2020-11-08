@@ -7,17 +7,20 @@ query issues($query: String!, $after: String) {
         bodyText
         state
         createdAt
+        number
         author {
           login
           avatarUrl
         }
         comments(first: 10) {
           nodes {
+            id
+            createdAt
+            bodyText
             author {
               login
               avatarUrl
             }
-            bodyText
           }
           pageInfo {
             endCursor

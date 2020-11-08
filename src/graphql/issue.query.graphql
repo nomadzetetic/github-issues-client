@@ -1,0 +1,32 @@
+query issue($number: Int!, $after: String) {
+  repository(name: "react", owner: "facebook") {
+    id
+    issue(number: $number) {
+      id
+      title
+      bodyText
+      state
+      createdAt
+      number
+      author {
+        login
+        avatarUrl
+      }
+      comments(first: 10, after: $after) {
+        nodes {
+          id
+          bodyText
+          createdAt
+          author {
+            login
+            avatarUrl
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+}

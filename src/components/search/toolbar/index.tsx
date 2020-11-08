@@ -1,10 +1,10 @@
 import React from 'react';
 import { IssueState } from '../../../graphql';
-import { useSearch } from '../../../hooks/use-search';
+import { useSearch } from '../use-search';
 import classes from './toolbar.module.scss';
 
 export const SearchToolbar: React.FC = () => {
-  const { inSearch, search, issueState, searchText, setIssueState, setSearchText } = useSearch();
+  const { busy, search, issueState, searchText, setIssueState, setSearchText } = useSearch();
 
   const onStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIssueState(e.target.value as IssueState);
@@ -27,7 +27,7 @@ export const SearchToolbar: React.FC = () => {
           placeholder="Type text to search in issue body"
           type="text"
           data-testid="searchInput"
-          disabled={inSearch}
+          disabled={busy}
           onChange={onSearchTextChange}
           value={searchText}
         />
@@ -41,7 +41,7 @@ export const SearchToolbar: React.FC = () => {
             data-testid="searchIssueStateOpen"
             onChange={onStatusChange}
             value={IssueState.Open}
-            disabled={inSearch}
+            disabled={busy}
             checked={issueState === IssueState.Open}
           />
         </label>
@@ -52,14 +52,14 @@ export const SearchToolbar: React.FC = () => {
             name="issueState"
             onChange={onStatusChange}
             value={IssueState.Closed}
-            disabled={inSearch}
+            disabled={busy}
             data-testid="searchIssueStateClosed"
             checked={issueState === IssueState.Closed}
           />
         </label>
       </div>
       <div className={classes.buttonContainer}>
-        <button type="submit" data-testid="searchButton" disabled={inSearch}>
+        <button type="submit" data-testid="searchButton" disabled={busy}>
           Search
         </button>
       </div>

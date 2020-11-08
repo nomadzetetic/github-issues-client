@@ -1,6 +1,14 @@
 import React from 'react';
-import { Search } from '../search';
+import { SearchResultsList } from '../search/list';
+import { LoadMoreButton } from '../search/load-more';
+import { SearchToolbar } from '../search/toolbar';
 
 export const RootPage: React.FC = () => {
-  return <Search />
+  return (
+    <div>
+      <SearchToolbar />
+      <SearchResultsList />
+      <LoadMoreButton />
+    </div>
+  );
 };

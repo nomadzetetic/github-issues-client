@@ -4,10 +4,10 @@ import { MemoryRouter } from 'react-router-dom';
 import { mocked } from 'ts-jest/utils';
 import { SearchResultsList } from '.';
 import { IssueState } from '../../../graphql';
-import { useSearch } from '../../../hooks/use-search';
-import { IssueViewModel } from '../../../state';
+import { useSearch } from '../use-search';
+import { IssueSearchViewModel } from '../use-search/state';
 
-jest.mock('../../../hooks/use-search', () => ({ useSearch: jest.fn() }));
+jest.mock('../use-search', () => ({ useSearch: jest.fn() }));
 
 describe('<SearchResultsList />', () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('<SearchResultsList />', () => {
   });
 
   test('render not render results list', () => {
-    mocked<any>(useSearch).mockImplementation(() => ({ issues: [] }));
+    mocked<any>(useSearch).mockImplementation(() => ({ issuesList: [] }));
     const { asFragment } = render(
       <MemoryRouter>
         <SearchResultsList />
@@ -25,13 +25,14 @@ describe('<SearchResultsList />', () => {
   });
 
   test('render issues list', async () => {
-    const issues: Array<IssueViewModel> = [
+    const issuesList: Array<IssueSearchViewModel> = [
       {
         id: '1',
         author: {
           avatarUrl: '/avatar',
           login: 'user1',
         },
+        number: 1,
         createdAt: 'now',
         state: IssueState.Open,
         title: 'title1',
@@ -41,12 +42,13 @@ describe('<SearchResultsList />', () => {
         author: {
           login: 'user2',
         },
+        number: 2,
         createdAt: 'yesterday',
         state: IssueState.Closed,
         title: 'title2',
       },
     ];
-    mocked<any>(useSearch).mockImplementation(() => ({ issues }));
+    mocked<any>(useSearch).mockImplementation(() => ({ issuesList }));
     const { findByText, container } = render(
       <MemoryRouter>
         <SearchResultsList />

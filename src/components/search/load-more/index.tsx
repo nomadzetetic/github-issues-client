@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSearch } from '../../../hooks/use-search';
+import { useSearch } from '../use-search';
 import classes from './load-more.module.scss';
 
 export const LoadMoreButton: React.FC = () => {
-  const { searchCursor, inSearch, search } = useSearch();
+  const { searchCursor, busy, search } = useSearch();
 
   const onLoadMoreClick = () => {
     search(searchCursor);
@@ -14,7 +14,7 @@ export const LoadMoreButton: React.FC = () => {
       <button
         type="button"
         data-testid="loadMoreButton"
-        disabled={inSearch}
+        disabled={busy}
         onClick={onLoadMoreClick}
       >
         Load More

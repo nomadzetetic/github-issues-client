@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSearch } from '../../../hooks/use-search';
+import { useSearch } from '../use-search';
 import classes from './list.module.scss';
 
 export const SearchResultsList = () => {
-  const { issues } = useSearch();
+  const { issuesList } = useSearch();
 
-  if (!issues?.length) {
+  if (!issuesList?.length) {
     return null;
   }
 
@@ -21,7 +21,7 @@ export const SearchResultsList = () => {
         </tr>
       </thead>
       <tbody>
-        {issues.map((issue) => (
+        {issuesList.map((issue) => (
           <tr key={issue.id}>
             <td className={classes.cell}>
               {issue?.author?.avatarUrl ? (
@@ -33,7 +33,7 @@ export const SearchResultsList = () => {
               ) : null}
             </td>
             <td className={classes.cell}>
-              <Link to={`/details/${issue.id}`}>{issue.title}</Link>
+              <Link to={`/details/${issue.number}`}>{issue.title}</Link>
             </td>
             <td className={classes.cell}>{issue.createdAt}</td>
             <td className={classes.cell}>{issue.state}</td>
